@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "py-simple-inventory"
+version = "0.1.0"
+description = "Desktop warehouse management app with Tkinter + SQLite"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+excel = ["openpyxl>=3.1.0"]
+build = ["pyinstaller>=6.0.0", "openpyxl>=3.1.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools]
+packages = ["database", "services", "ui"]
+py-modules = ["app_paths", "app"]
