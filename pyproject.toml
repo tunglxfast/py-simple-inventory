@@ -10,13 +10,15 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
 excel = ["openpyxl>=3.1.0"]
 build = ["pyinstaller>=6.0.0", "openpyxl>=3.1.0"]
+gui = ["PySide6>=6.7.0"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.setuptools]
-packages = ["database", "services", "ui"]
-py-modules = ["app_paths", "app"]
+packages = ["database", "services", "ui", "ui_qt"]
+py-modules = ["app_paths", "app", "app_qt"]

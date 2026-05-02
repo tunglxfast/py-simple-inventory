@@ -1,6 +1,7 @@
 # Py Simple Inventory
 
 Warehouse management desktop app with Python, Tkinter, SQLite.
+Project now includes a parallel PySide6 UI migration path.
 
 ## Data location
 
@@ -14,6 +15,13 @@ Warehouse management desktop app with Python, Tkinter, SQLite.
 
 ```bash
 python3 app.py
+```
+
+PySide6 UI (new):
+
+```bash
+uv pip install -e ".[gui]"
+uv run python app_qt.py
 ```
 
 ## Test
@@ -45,3 +53,22 @@ scripts\\build_pyinstaller.bat
 ```
 
 Output binary is generated in `dist/PySimpleInventory`.
+
+## PySide6 Migration Status
+
+- Added `app_qt.py` entrypoint and `ui_qt/` package.
+- Implemented functional pages in Qt:
+  - Products (create/update + inventory table)
+  - Import / Export movement form (`QSpinBox` for quantity)
+  - Hold creation (table-based SKU/Quantity input)
+  - Hold management (session list + return quantity editor + finalize)
+  - Sales list table
+  - Reports with `QDateEdit` date inputs + inventory/summary tables
+  - Setup with preview/import/reset/backup/restore flows
+- Added restore/reset/finalize confirmation dialogs in Qt flow.
+- Kept original Tkinter app intact for fallback during migration.
+
+## Additional Docs
+
+- UI quick usage: `docs/UI_QUICKSTART.md`
+- Build + GitHub release guide: `docs/RELEASE_PYINSTALLER.md`

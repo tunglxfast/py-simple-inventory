@@ -591,6 +591,17 @@ class SetupPage(BasePage):
         backup_file = filedialog.askopenfilename(filetypes=[("SQLite", "*.db")])
         if not backup_file:
             return
+        confirm = messagebox.askyesno(
+            "Confirm Restore",
+            (
+                "Restore will overwrite the current database with the selected backup.\n"
+                "This action cannot be undone.\n\n"
+                f"Backup file:\n{backup_file}\n\n"
+                "Do you want to continue?"
+            ),
+        )
+        if not confirm:
+            return
         try:
             self.service.restore_db(backup_file)
             self.show_info("Restore completed. Restart app recommended.")
