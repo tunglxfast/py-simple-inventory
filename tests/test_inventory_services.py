@@ -1,0 +1,111 @@
+from datetime import date
+
+import pytest
+
+from app.models.stock import StockDocumentType
+from app.repositories import stock_repository
+from app.services import area_service, product_service, stock_service
+from app.services.exceptions import BusinessError
+
+
+def seed_product_and_area(db):
+    product = product_service.create_product(db, "SP001", "Áo sơ mi", "Cái")
+    area = area_service.create_area(db, "Kho chính")
+    return product, area
+
+
+def test_product_delete_sets_inactive(db_session):
+    product, _ = seed_product_and_area(db_session)
+
+    product_service.delete_product(db_session, product.id)
+
+    products = product_service.list_products(db_session)
+    all_products = product_service.list_products(db_session, include_inactive=True)
+    assert products == []
+    assert all_products[0].is_active is False
+
+
+def test_stock_in_and_out_changes_inventory(db_session):
+    product, area = seed_product_and_area(db_session)
+
+    stock_service.create_stock_document(
+        db_session,
+        StockDocumentType.IN.value,
+        [{"product_id": product.id, "quantity": 10}],
+        date.today(),
+        area.id,
+        "Nhập đầu",
+        "Admin",
+        "",
+    )
+    stock_service.create_stock_document(
+        db_session,
+        StockDocumentType.OUT.value,
+        [{"product_id": product.id, "quantity": 4}],
+        date.today(),
+        area.id,
+        "Xuất",
+        "Admin",
+        "",
+    )
+
+    stock = stock_repository.get_stock_by_product_ids(db_session, [product.id])
+    assert stock[product.id] == 6
+
+
+def test_stock_out_blocks_negative_inventory(db_session):
+    product, area = seed_product_and_area(db_session)
+
+    with pytest.raises(BusinessError):
+        stock_service.create_stock_document(
+            db_session,
+            StockDocumentType.OUT.value,
+            [{"product_id": product.id, "quantity": 1}],
+            date.today(),
+            area.id,
+            "Xuất",
+            "Admin",
+            "",
+        )
+
+
+def test_reset_inventory_creates_adjust_in_and_out(db_session):
+    product_a, area = seed_product_and_area(db_session)
+    product_b = product_service.create_product(db_session, "SP002", "Quần jean", "Cái")
+    stock_service.create_stock_document(
+        db_session,
+        StockDocumentType.IN.value,
+        [
+            {"product_id": product_a.id, "quantity": 5},
+            {"product_id": product_b.id, "quantity": 10},
+        ],
+        date.today(),
+        area.id,
+        "Nhập",
+        "Admin",
+        "",
+    )
+
+    adjust_in_count, adjust_out_count = stock_service.reset_inventory(
+        db_session,
+        {product_a.id: 8, product_b.id: 3},
+    )
+
+    stock = stock_repository.get_stock_by_product_ids(db_session, [product_a.id, product_b.id])
+    documents = stock_service.list_documents(db_session)
+    assert adjust_in_count == 1
+    assert adjust_out_count == 1
+    assert stock[product_a.id] == 8
+    assert stock[product_b.id] == 3
+    assert {document.type for document in documents} >= {
+        StockDocumentType.ADJUST_IN.value,
+        StockDocumentType.ADJUST_OUT.value,
+    }
+
+
+def test_reset_inventory_rejects_negative_quantity(db_session):
+    product, _ = seed_product_and_area(db_session)
+
+    with pytest.raises(BusinessError):
+        stock_service.reset_inventory(db_session, {product.id: -1})
+

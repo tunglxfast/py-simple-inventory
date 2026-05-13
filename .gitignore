@@ -3,3 +3,10 @@ __pycache__/
 .venv/
 .env
 *.db
+vendors/
+data/
+dist/
+build/
+*.spec
+.pytest_cache/
+.DS_Store

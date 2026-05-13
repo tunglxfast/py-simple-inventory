@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng nhập</title>
+  <link rel="stylesheet" href="/static/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
+  <section class="panel" style="width: 380px;">
+    <h1 class="h4 mb-3">Đăng nhập</h1>
+    {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+    <form method="post" action="/login" class="d-grid gap-3">
+      <div>
+        <label class="form-label">Tài khoản</label>
+        <input class="form-control" name="username" value="{{ username or '' }}" autofocus>
+      </div>
+      <div>
+        <label class="form-label">Mật khẩu</label>
+        <input class="form-control" name="password" type="password">
+      </div>
+      <button class="btn btn-primary" type="submit">Đăng nhập</button>
+      <p class="small text-secondary mb-0">Mặc định lần đầu: admin / admin</p>
+    </form>
+  </section>
+</body>
+</html>

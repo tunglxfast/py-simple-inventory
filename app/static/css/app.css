@@ -1,0 +1,87 @@
+:root {
+  --app-green: #6bbf8a;
+  --app-green-light: #eaf7ef;
+  --app-green-dark: #2f7d4f;
+  --app-border: #dbe7df;
+  --app-text: #1f2a24;
+}
+
+body {
+  background: #f8fbf9;
+  color: var(--app-text);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.app-sidebar {
+  background: #ffffff;
+  border-right: 1px solid var(--app-border);
+  padding: 18px;
+}
+
+.app-brand {
+  color: var(--app-green-dark);
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 24px;
+}
+
+.app-nav a,
+.app-nav button {
+  color: #294135;
+  border-radius: 8px;
+  display: block;
+  padding: 10px 12px;
+  text-decoration: none;
+  width: 100%;
+  text-align: left;
+}
+
+.app-nav a:hover,
+.app-nav button:hover {
+  background: var(--app-green-light);
+  color: var(--app-green-dark);
+}
+
+.app-content {
+  padding: 24px;
+}
+
+.page-title {
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--app-green-dark);
+  --bs-btn-border-color: var(--app-green-dark);
+  --bs-btn-hover-bg: #276842;
+  --bs-btn-hover-border-color: #276842;
+}
+
+.table thead th {
+  background: var(--app-green-light);
+  color: #294135;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+  .app-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--app-border);
+  }
+}
+

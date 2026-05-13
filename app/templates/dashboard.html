@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Dashboard</h1>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="panel"><div class="text-secondary">Sản phẩm</div><div class="fs-2 fw-bold">{{ product_count }}</div></div></div>
+  <div class="col-md-4"><div class="panel"><div class="text-secondary">Phiếu kho</div><div class="fs-2 fw-bold">{{ document_count }}</div></div></div>
+  <div class="col-md-4"><div class="panel"><div class="text-secondary">Tồn thấp</div><div class="fs-2 fw-bold">{{ low_stock_count }}</div></div></div>
+</div>
+<div class="panel">
+  <h2 class="h5 mb-3">Tồn kho nhanh</h2>
+  <table class="table align-middle">
+    <thead><tr><th>Mã hàng</th><th>Tên hàng hóa</th><th>Đơn vị</th><th class="text-end">Tồn</th></tr></thead>
+    <tbody>
+      {% for row in stock_rows %}
+      <tr><td>{{ row.code }}</td><td>{{ row.name }}</td><td>{{ row.unit }}</td><td class="text-end">{{ row.stock }}</td></tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-secondary">Chưa có dữ liệu</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
