@@ -113,7 +113,7 @@ Tất cả cột dạng text trong database phải hỗ trợ Unicode tiếng Vi
 ### `stock_documents`
 
 - `id`
-- `type`: `IN` hoặc `OUT`
+- `type`: `IN`, `OUT`, `ADJUST-IN`, hoặc `ADJUST-OUT`
 - `date`
 - `area_id`
 - `description`
@@ -138,6 +138,18 @@ Tất cả cột dạng text trong database phải hỗ trợ Unicode tiếng Vi
 - Xuất kho: route nhận form -> service kiểm tra tồn -> repository tạo phiếu và dòng phiếu nếu hợp lệ.
 - Báo cáo: route nhận bộ lọc -> service chuẩn hóa filter -> repository aggregate giao dịch -> route render bảng hoặc export Excel.
 - Xoá sản phẩm: route nhận action -> service kiểm tra nghiệp vụ nếu cần -> repository set `is_active = false`.
+- Reset tồn kho: route nhận số lượng tồn mong muốn cho từng sản phẩm -> service so sánh với tồn hiện tại -> repository tạo dòng điều chỉnh `ADJUST-IN` hoặc `ADJUST-OUT` theo phần chênh lệch.
+
+## Adjustment Documents
+
+Phiếu điều chỉnh tồn kho phục vụ chức năng reset/nhập lại tồn kho ban đầu.
+
+- Nếu số lượng sản phẩm mà người dùng nhập lớn hơn tồn hiện tại, tạo điều chỉnh `ADJUST-IN` với số lượng bằng phần chênh lệch.
+- Nếu số lượng sản phẩm mà người dùng nhập nhỏ hơn tồn hiện tại, tạo điều chỉnh `ADJUST-OUT` với số lượng bằng phần chênh lệch.
+- Nếu số lượng sản phẩm mà người dùng nhập bằng tồn hiện tại, không tạo dòng điều chỉnh cho sản phẩm đó.
+- Phiếu điều chỉnh không cần đầy đủ thông tin nghiệp vụ như phiếu nhập/xuất thường; chỉ bắt buộc `id`, `type`, `created_at`, và các dòng hàng liên quan.
+- Các cột metadata của `stock_documents` như `date`, `area_id`, `description`, `proposed_by`, `note` cần cho phép nullable hoặc có chiến lược default phù hợp để hỗ trợ phiếu điều chỉnh.
+- Báo cáo tồn kho phải tính cả `ADJUST-IN` như nhập và `ADJUST-OUT` như xuất.
 
 ## UI Architecture
 

@@ -17,6 +17,7 @@ Các chức năng chính của v1:
 - Báo cáo xuất - nhập - tồn.
 - Xuất báo cáo Excel.
 - Đăng nhập admin local.
+- Reset/nhập lại tồn kho ban đầu cho sản phẩm.
 
 UI dùng tiếng Việt, ưu tiên phong cách desktop app quản lý kho: bảng dữ liệu lớn, sidebar điều hướng, tìm kiếm/lọc rõ ràng, tông trắng và xanh lá nhạt.
 
@@ -84,14 +85,21 @@ UI dùng tiếng Việt, ưu tiên phong cách desktop app quản lý kho: bản
 - Hiển thị đầu kỳ, nhập, xuất, tồn cuối.
 - Xuất file `.xlsx` theo bộ lọc hiện tại.
 
-### 6. Login/Auth
+### 6. Reset/nhập lại tồn kho
+
+- Có page riêng hiển thị tất cả sản phẩm với ô số lượng mặc định là 0.
+- Người dùng nhập số lượng tồn mong muốn cho từng sản phẩm; số lượng không được âm.
+- Khi xác nhận, app tạo phiếu điều chỉnh nhập/xuất nếu cần để tồn kho sau cùng bằng đúng số lượng người dùng đã nhập.
+- Chức năng này là chức năng phụ, triển khai sau khi các chức năng kho chính đã ổn định.
+
+### 7. Login/Auth
 
 - Đăng nhập admin local.
 - Lưu password bằng bcrypt hash.
 - Bảo vệ các page chính.
 - Hỗ trợ logout.
 
-### 7. Đóng gói Windows
+### 8. Đóng gói Windows
 
 - Build bằng PyInstaller.
 - Bàn giao app dạng thư mục portable.
@@ -109,6 +117,7 @@ UI dùng tiếng Việt, ưu tiên phong cách desktop app quản lý kho: bản
 - Lịch sử phiếu kho: xem, tìm kiếm, lọc phiếu nhập/xuất.
 - Chi tiết phiếu kho: xem thông tin phiếu và các dòng hàng.
 - Báo cáo xuất - nhập - tồn: xem báo cáo và xuất Excel.
+- Reset tồn kho: nhập lại số lượng tồn mong muốn cho tất cả sản phẩm.
 
 ## Quyết Định Chức Năng Đã Chốt
 
@@ -119,6 +128,7 @@ UI dùng tiếng Việt, ưu tiên phong cách desktop app quản lý kho: bản
 - Tồn kho được tính từ giao dịch, không dùng `current_stock` làm nguồn sự thật.
 - Phiếu kho dùng mô hình header + nhiều dòng hàng.
 - Không cho xuất âm kho.
+- Reset tồn kho tạo giao dịch điều chỉnh `ADJUST-IN` hoặc `ADJUST-OUT` theo chênh lệch giữa tồn hiện tại và số lượng người dùng nhập.
 - Product v1 gồm tối thiểu: mã hàng, tên hàng hóa, đơn vị tính, ghi chú, trạng thái active.
 - Xoá sản phẩm trong UI là chuyển sản phẩm sang inactive.
 - Báo cáo v1 có xuất Excel.

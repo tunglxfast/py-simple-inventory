@@ -43,7 +43,8 @@ Tài liệu này là source of truth cho quy ước viết code, naming, phân l
 - Không sửa schema trực tiếp trong database local rồi bỏ qua migration.
 - Tất cả cột dạng text phải hỗ trợ Unicode tiếng Việt.
 - Không hard delete dữ liệu nghiệp vụ trong UI nếu chức năng đã được định nghĩa là inactive.
-- Quantity phải validate lớn hơn 0 ở schema/service.
+- Quantity trong phiếu nhập/xuất/điều chỉnh phải validate lớn hơn 0 ở schema/service.
+- Input số lượng tồn mong muốn trong chức năng reset tồn kho được phép bằng 0 nhưng không được âm.
 - Constraint quan trọng phải được thể hiện ở model/migration, không chỉ validate ở UI.
 - Transaction tạo phiếu kho phải đảm bảo header và lines được lưu cùng nhau hoặc rollback cùng nhau.
 
@@ -55,6 +56,7 @@ Tài liệu này là source of truth cho quy ước viết code, naming, phân l
 - Màu chủ đạo: trắng, xanh lá nhạt, xám nhạt cho border/background phụ.
 - Bảng dữ liệu phải dễ đọc, có header rõ, căn lề hợp lý, và trạng thái rỗng nếu chưa có dữ liệu.
 - Form nhập/xuất kho phải có validation rõ ràng.
+- Form reset tồn kho phải hiển thị tất cả sản phẩm với số lượng mặc định là 0 và chặn số âm trước khi submit.
 - Nút hành động chính cần nổi bật, nhưng không làm UI quá nặng.
 - Search/filter nên nằm gần bảng dữ liệu liên quan.
 - Các page danh sách cần có trạng thái loading/rỗng/lỗi phù hợp với server-rendered UI.
@@ -73,6 +75,11 @@ Tài liệu này là source of truth cho quy ước viết code, naming, phân l
   - Xuất kho vượt tồn bị chặn.
   - Báo cáo xuất - nhập - tồn tính đúng.
   - Xuất Excel tạo file hợp lệ.
+  - Reset tồn kho tạo `ADJUST-IN` khi số lượng mong muốn lớn hơn tồn hiện tại.
+  - Reset tồn kho tạo `ADJUST-OUT` khi số lượng mong muốn nhỏ hơn tồn hiện tại.
+  - Reset tồn kho không tạo dòng điều chỉnh khi số lượng mong muốn bằng tồn hiện tại.
+  - Reset tồn kho với input 0, tồn sản phẩm kiểm tra đã về 0.
+  - Reset tồn kho từ chối số lượng âm.
   - Luồng kiểm tra database khi mở app: đã có DB thì kết nối, chưa có DB thì hiện setup và tạo DB.
 - Sau mỗi module UI, chạy test trên MacBook và để người dùng manual check trước khi sang module tiếp theo.
 
