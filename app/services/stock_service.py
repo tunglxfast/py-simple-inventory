@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.models.stock import StockDocumentType
 from app.repositories import area_repository, product_repository, stock_repository
-from app.schemas.stock import StockLineData
+from app.schemas.dto import StockLineData
 from app.services.exceptions import BusinessError
 
 

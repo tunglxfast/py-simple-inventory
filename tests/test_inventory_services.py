@@ -4,7 +4,7 @@ import pytest
 
 from app.models.stock import StockDocumentType
 from app.repositories import stock_repository
-from app.schemas.stock import StockLineData
+from app.schemas.dto import StockLineData
 from app.services import area_service, product_service, stock_service
 from app.services.exceptions import BusinessError
 

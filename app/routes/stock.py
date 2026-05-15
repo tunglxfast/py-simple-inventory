@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.routes.dependencies import template_context
-from app.schemas.stock import StockLineData
+from app.schemas.dto import StockLineData
 from app.services import area_service, product_service, stock_service
 from app.services.exceptions import BusinessError
 

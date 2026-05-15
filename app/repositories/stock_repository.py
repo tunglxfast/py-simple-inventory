@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.models.product import Product
 from app.models.stock import StockDocument, StockDocumentLine, StockDocumentType
-from app.schemas.stock import StockLineData
+from app.schemas.dto import StockLineData
 
 IN_TYPES = (StockDocumentType.IN.value, StockDocumentType.ADJUST_IN.value)
 OUT_TYPES = (StockDocumentType.OUT.value, StockDocumentType.ADJUST_OUT.value)
