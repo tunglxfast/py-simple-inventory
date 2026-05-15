@@ -4,6 +4,7 @@ import pytest
 
 from app.models.stock import StockDocumentType
 from app.repositories import stock_repository
+from app.schemas.stock import StockLineData
 from app.services import area_service, product_service, stock_service
 from app.services.exceptions import BusinessError
 
@@ -12,6 +13,10 @@ def seed_product_and_area(db):
     product = product_service.create_product(db, "SP001", "Áo sơ mi", "Cái")
     area = area_service.create_area(db, "Kho chính")
     return product, area
+
+
+def line(product_id: int, quantity: int, note: str | None = None) -> StockLineData:
+    return StockLineData(product_id=product_id, quantity=quantity, note=note)
 
 
 def test_product_delete_sets_inactive(db_session):
@@ -47,7 +52,7 @@ def test_stock_in_and_out_changes_inventory(db_session):
     stock_service.create_stock_document(
         db_session,
         StockDocumentType.IN.value,
-        [{"product_id": product.id, "quantity": 10}],
+        [line(product.id, 10)],
         date.today(),
         area.id,
         "Nhập đầu",
@@ -57,7 +62,7 @@ def test_stock_in_and_out_changes_inventory(db_session):
     stock_service.create_stock_document(
         db_session,
         StockDocumentType.OUT.value,
-        [{"product_id": product.id, "quantity": 4}],
+        [line(product.id, 4)],
         date.today(),
         area.id,
         "Xuất",
@@ -76,7 +81,7 @@ def test_stock_out_blocks_negative_inventory(db_session):
         stock_service.create_stock_document(
             db_session,
             StockDocumentType.OUT.value,
-            [{"product_id": product.id, "quantity": 1}],
+            [line(product.id, 1)],
             date.today(),
             area.id,
             "Xuất",
@@ -93,7 +98,7 @@ def test_stock_document_rejects_inactive_area(db_session):
         stock_service.create_stock_document(
             db_session,
             StockDocumentType.IN.value,
-            [{"product_id": product.id, "quantity": 1}],
+            [line(product.id, 1)],
             date.today(),
             area.id,
             "Nhập",
@@ -109,7 +114,7 @@ def test_stock_document_rejects_missing_product(db_session):
         stock_service.create_stock_document(
             db_session,
             StockDocumentType.IN.value,
-            [{"product_id": 999, "quantity": 1}],
+            [line(999, 1)],
             date.today(),
             area.id,
             "Nhập",
@@ -126,7 +131,7 @@ def test_stock_document_rejects_inactive_product(db_session):
         stock_service.create_stock_document(
             db_session,
             StockDocumentType.IN.value,
-            [{"product_id": product.id, "quantity": 1}],
+            [line(product.id, 1)],
             date.today(),
             area.id,
             "Nhập",
@@ -142,8 +147,8 @@ def test_reset_inventory_creates_adjust_in_and_out(db_session):
         db_session,
         StockDocumentType.IN.value,
         [
-            {"product_id": product_a.id, "quantity": 5},
-            {"product_id": product_b.id, "quantity": 10},
+            line(product_a.id, 5),
+            line(product_b.id, 10),
         ],
         date.today(),
         area.id,

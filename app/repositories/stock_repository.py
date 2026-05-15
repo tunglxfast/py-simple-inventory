@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.models.product import Product
 from app.models.stock import StockDocument, StockDocumentLine, StockDocumentType
+from app.schemas.stock import StockLineData
 
 IN_TYPES = (StockDocumentType.IN.value, StockDocumentType.ADJUST_IN.value)
 OUT_TYPES = (StockDocumentType.OUT.value, StockDocumentType.ADJUST_OUT.value)
@@ -14,7 +15,7 @@ OUT_TYPES = (StockDocumentType.OUT.value, StockDocumentType.ADJUST_OUT.value)
 def create_document(
     db: Session,
     document_type: str,
-    lines: Iterable[dict],
+    lines: Iterable[StockLineData],
     document_date: date | None = None,
     area_id: int | None = None,
     description: str | None = None,
@@ -32,9 +33,9 @@ def create_document(
     for line in lines:
         document.lines.append(
             StockDocumentLine(
-                product_id=int(line["product_id"]),
-                quantity=int(line["quantity"]),
-                note=line.get("note") or None,
+                product_id=line.product_id,
+                quantity=line.quantity,
+                note=line.note or None,
             )
         )
     db.add(document)

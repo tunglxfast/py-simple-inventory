@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.models.stock import StockDocumentType
 from app.repositories import area_repository, product_repository, stock_repository
+from app.schemas.stock import StockLineData
 from app.services.exceptions import BusinessError
 
 
@@ -21,7 +22,7 @@ def get_document(db: Session, document_id: int):
 def create_stock_document(
     db: Session,
     document_type: str,
-    lines: list[dict],
+    lines: list[StockLineData],
     document_date: date,
     area_id: int,
     description: str | None,
@@ -71,14 +72,14 @@ def reset_inventory(db: Session, desired_quantities: dict[int, int]) -> tuple[in
             raise BusinessError(f"Sản phẩm {format_product(product.id, product.name)} đã bị ngưng hoạt động.")
 
     current = stock_repository.get_stock_by_product_ids(db, product_ids)
-    adjust_in_lines = []
-    adjust_out_lines = []
+    adjust_in_lines: list[StockLineData] = []
+    adjust_out_lines: list[StockLineData] = []
     for product_id, desired in desired_quantities.items():
         delta = desired - current.get(product_id, 0)
         if delta > 0:
-            adjust_in_lines.append({"product_id": product_id, "quantity": delta})
+            adjust_in_lines.append(StockLineData(product_id=product_id, quantity=delta))
         elif delta < 0:
-            adjust_out_lines.append({"product_id": product_id, "quantity": abs(delta)})
+            adjust_out_lines.append(StockLineData(product_id=product_id, quantity=abs(delta)))
 
     if adjust_in_lines:
         stock_repository.create_document(db, StockDocumentType.ADJUST_IN.value, adjust_in_lines)
@@ -96,37 +97,45 @@ def get_inventory_report(db: Session):
     return stock_repository.get_inventory_report(db)
 
 
-def normalize_lines(lines: list[dict]) -> list[dict]:
-    merged: dict[int, dict] = {}
+def normalize_lines(lines: list[StockLineData]) -> list[StockLineData]:
+    merged: dict[int, StockLineData] = {}
     for line in lines:
-        product_id = int(line.get("product_id") or 0)
-        quantity = int(line.get("quantity") or 0)
-        if product_id <= 0:
+        if line.product_id <= 0:
             raise BusinessError("Dòng hàng có sản phẩm không hợp lệ.")
-        if quantity <= 0:
+        if line.quantity <= 0:
             raise BusinessError("Số lượng phải lớn hơn 0.")
-        if product_id not in merged:
-            merged[product_id] = {"product_id": product_id, "quantity": 0, "note": line.get("note")}
-        merged[product_id]["quantity"] += quantity
+        if line.product_id not in merged:
+            merged[line.product_id] = StockLineData(
+                product_id=line.product_id,
+                quantity=line.quantity,
+                note=line.note,
+            )
+        else:
+            merged_line = merged[line.product_id]
+            merged[line.product_id] = StockLineData(
+                product_id=merged_line.product_id,
+                quantity=merged_line.quantity + line.quantity,
+                note=merged_line.note,
+            )
     return list(merged.values())
 
 
-def ensure_enough_stock(db: Session, lines: list[dict]) -> None:
-    stock = stock_repository.get_stock_by_product_ids(db, [line["product_id"] for line in lines])
+def ensure_enough_stock(db: Session, lines: list[StockLineData]) -> None:
+    stock = stock_repository.get_stock_by_product_ids(db, [line.product_id for line in lines])
     for line in lines:
-        product = product_repository.get_product(db, line["product_id"])
+        product = product_repository.get_product(db, line.product_id)
         if not product:
-            raise BusinessError(f"Không tìm thấy sản phẩm ID {line['product_id']}.")
-        available = stock.get(line["product_id"], 0)
-        if line["quantity"] > available:
+            raise BusinessError(f"Không tìm thấy sản phẩm ID {line.product_id}.")
+        available = stock.get(line.product_id, 0)
+        if line.quantity > available:
             raise BusinessError(f"Sản phẩm {format_product(product.id, product.name)} không đủ tồn kho.")
 
 
-def ensure_active_products(db: Session, lines: list[dict]) -> None:
+def ensure_active_products(db: Session, lines: list[StockLineData]) -> None:
     for line in lines:
-        product = product_repository.get_product(db, line["product_id"])
+        product = product_repository.get_product(db, line.product_id)
         if not product:
-            raise BusinessError(f"Không tìm thấy sản phẩm ID {line['product_id']}.")
+            raise BusinessError(f"Không tìm thấy sản phẩm ID {line.product_id}.")
         if not product.is_active:
             raise BusinessError(f"Sản phẩm {format_product(product.id, product.name)} đã bị ngưng hoạt động.")
 

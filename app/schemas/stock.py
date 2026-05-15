@@ -1,6 +1,16 @@
 from datetime import date
+from dataclasses import dataclass
 
 from pydantic import BaseModel, Field
+
+
+@dataclass(slots=True)
+class StockLineData:
+    """DTO for passing stock line data between routes, services, and repositories."""
+
+    product_id: int
+    quantity: int
+    note: str | None = None
 
 
 class StockLineInput(BaseModel):
@@ -17,4 +27,3 @@ class StockDocumentInput(BaseModel):
     proposed_by: str | None = None
     note: str | None = None
     lines: list[StockLineInput]
-

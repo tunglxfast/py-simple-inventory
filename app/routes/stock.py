@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.routes.dependencies import template_context
+from app.schemas.stock import StockLineData
 from app.services import area_service, product_service, stock_service
 from app.services.exceptions import BusinessError
 
@@ -46,7 +47,7 @@ def create_stock_document(
     db: Session = Depends(get_db),
 ):
     lines = [
-        {"product_id": pid, "quantity": qty, "note": line_note[index] if index < len(line_note) else ""}
+        StockLineData(product_id=pid, quantity=qty, note=line_note[index] if index < len(line_note) else "")
         for index, (pid, qty) in enumerate(zip(product_id, quantity, strict=False))
         if pid and qty
     ]
