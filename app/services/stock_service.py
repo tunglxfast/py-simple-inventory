@@ -32,9 +32,13 @@ def create_stock_document(
         raise BusinessError("Loại phiếu không hợp lệ.")
     if not lines:
         raise BusinessError("Phiếu kho phải có ít nhất một dòng hàng.")
-    if not area_repository.get_area(db, area_id):
+    area = area_repository.get_area(db, area_id)
+    if not area:
         raise BusinessError("Khu vực không hợp lệ.")
+    if not area.is_active:
+        raise BusinessError("Khu vực đã bị ngưng hoạt động.")
     normalized = normalize_lines(lines)
+    ensure_active_products(db, normalized)
     if document_type == StockDocumentType.OUT.value:
         ensure_enough_stock(db, normalized)
     document = stock_repository.create_document(
@@ -61,8 +65,10 @@ def reset_inventory(db: Session, desired_quantities: dict[int, int]) -> tuple[in
     product_ids = list(desired_quantities)
     for product_id in product_ids:
         product = product_repository.get_product(db, product_id)
-        if not product or not product.is_active:
-            raise BusinessError("Sản phẩm không hợp lệ.")
+        if not product:
+            raise BusinessError(f"Không tìm thấy sản phẩm ID {product_id}.")
+        if not product.is_active:
+            raise BusinessError(f"Sản phẩm {format_product(product.id, product.name)} đã bị ngưng hoạt động.")
 
     current = stock_repository.get_stock_by_product_ids(db, product_ids)
     adjust_in_lines = []
@@ -108,8 +114,22 @@ def normalize_lines(lines: list[dict]) -> list[dict]:
 def ensure_enough_stock(db: Session, lines: list[dict]) -> None:
     stock = stock_repository.get_stock_by_product_ids(db, [line["product_id"] for line in lines])
     for line in lines:
+        product = product_repository.get_product(db, line["product_id"])
+        if not product:
+            raise BusinessError(f"Không tìm thấy sản phẩm ID {line['product_id']}.")
         available = stock.get(line["product_id"], 0)
         if line["quantity"] > available:
-            product = product_repository.get_product(db, line["product_id"])
-            name = product.name if product else str(line["product_id"])
-            raise BusinessError(f"Sản phẩm {name} không đủ tồn kho.")
+            raise BusinessError(f"Sản phẩm {format_product(product.id, product.name)} không đủ tồn kho.")
+
+
+def ensure_active_products(db: Session, lines: list[dict]) -> None:
+    for line in lines:
+        product = product_repository.get_product(db, line["product_id"])
+        if not product:
+            raise BusinessError(f"Không tìm thấy sản phẩm ID {line['product_id']}.")
+        if not product.is_active:
+            raise BusinessError(f"Sản phẩm {format_product(product.id, product.name)} đã bị ngưng hoạt động.")
+
+
+def format_product(product_id: int, product_name: str) -> str:
+    return f"{product_name} (ID {product_id})"

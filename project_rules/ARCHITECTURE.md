@@ -2,7 +2,7 @@
 
 ## Vai Trò Tài Liệu
 
-Tài liệu này là source of truth cho kiến trúc kỹ thuật, cấu trúc thư mục, data flow, database schema, repositories, và cách app chạy offline/portable. Phạm vi sản phẩm nằm trong `PROJECT_PLAN.md`; quy tắc code nằm trong `CODING_STANDARDS.md`.
+Tài liệu này là source of truth cho kiến trúc kỹ thuật, cấu trúc thư mục, data flow, database schema, repositories, và cách app chạy offline/portable. Phạm vi sản phẩm nằm trong `project_rules/PROJECT_PLAN.md`; quy tắc code nằm trong `project_rules/CODING_STANDARDS.md`.
 
 ## Tổng Quan Kỹ Thuật
 
@@ -159,7 +159,7 @@ Phiếu điều chỉnh tồn kho phục vụ chức năng reset/nhập lại t�
 - JavaScript chỉ dùng cho tương tác nhỏ như thêm/xóa dòng phiếu, tính tổng tạm thời, và validate form cơ bản.
 - Layout chính gồm sidebar điều hướng và content area cho từng module.
 
-Frontend framework khác chỉ được đưa vào nếu đã được chủ dự án đồng ý. Quy tắc này được định nghĩa trong `CODING_STANDARDS.md`.
+Frontend framework khác chỉ được đưa vào nếu đã được chủ dự án đồng ý. Quy tắc này được định nghĩa trong `project_rules/CODING_STANDARDS.md`.
 
 ## Đóng Gói Và Đường Dẫn Dữ Liệu
 

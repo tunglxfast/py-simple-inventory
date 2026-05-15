@@ -11,8 +11,9 @@ def list_areas(db: Session, include_inactive: bool = False):
 def create_area(db: Session, name: str, description: str | None = None):
     if not name.strip():
         raise BusinessError("Tên khu vực không được để trống.")
-    if area_repository.get_by_name(db, name.strip()):
-        raise BusinessError("Tên khu vực đã tồn tại.")
+    existing = area_repository.get_by_name(db, name.strip())
+    if existing:
+        raise_duplicate_area_name(existing.is_active)
     area = area_repository.create_area(db, name, description)
     db.commit()
     return area
@@ -26,7 +27,13 @@ def update_area(db: Session, area_id: int, name: str, description: str | None, i
         raise BusinessError("Không tìm thấy khu vực.")
     existing = area_repository.get_by_name(db, name.strip())
     if existing and existing.id != area_id:
-        raise BusinessError("Tên khu vực đã tồn tại.")
+        raise_duplicate_area_name(existing.is_active)
     area_repository.update_area(db, area, name, description, is_active)
     db.commit()
     return area
+
+
+def raise_duplicate_area_name(is_active: bool) -> None:
+    if is_active:
+        raise BusinessError("Tên khu vực đã tồn tại.")
+    raise BusinessError("Tên khu vực đã bị ngưng hoạt động. Bật xem inactive để cập nhật lại khu vực.")

@@ -25,6 +25,22 @@ def test_product_delete_sets_inactive(db_session):
     assert all_products[0].is_active is False
 
 
+def test_create_product_reports_inactive_duplicate(db_session):
+    product, _ = seed_product_and_area(db_session)
+    product_service.delete_product(db_session, product.id)
+
+    with pytest.raises(BusinessError, match="ngưng hoạt động"):
+        product_service.create_product(db_session, "SP001", "Áo khác", "Cái")
+
+
+def test_create_area_reports_inactive_duplicate(db_session):
+    _, area = seed_product_and_area(db_session)
+    area_service.update_area(db_session, area.id, area.name, area.description, False)
+
+    with pytest.raises(BusinessError, match="ngưng hoạt động"):
+        area_service.create_area(db_session, area.name)
+
+
 def test_stock_in_and_out_changes_inventory(db_session):
     product, area = seed_product_and_area(db_session)
 
@@ -64,6 +80,56 @@ def test_stock_out_blocks_negative_inventory(db_session):
             date.today(),
             area.id,
             "Xuất",
+            "Admin",
+            "",
+        )
+
+
+def test_stock_document_rejects_inactive_area(db_session):
+    product, area = seed_product_and_area(db_session)
+    area_service.update_area(db_session, area.id, area.name, area.description, False)
+
+    with pytest.raises(BusinessError, match="Khu vực đã bị ngưng hoạt động"):
+        stock_service.create_stock_document(
+            db_session,
+            StockDocumentType.IN.value,
+            [{"product_id": product.id, "quantity": 1}],
+            date.today(),
+            area.id,
+            "Nhập",
+            "Admin",
+            "",
+        )
+
+
+def test_stock_document_rejects_missing_product(db_session):
+    _, area = seed_product_and_area(db_session)
+
+    with pytest.raises(BusinessError, match="Không tìm thấy sản phẩm ID 999"):
+        stock_service.create_stock_document(
+            db_session,
+            StockDocumentType.IN.value,
+            [{"product_id": 999, "quantity": 1}],
+            date.today(),
+            area.id,
+            "Nhập",
+            "Admin",
+            "",
+        )
+
+
+def test_stock_document_rejects_inactive_product(db_session):
+    product, area = seed_product_and_area(db_session)
+    product_service.delete_product(db_session, product.id)
+
+    with pytest.raises(BusinessError, match=rf"Sản phẩm Áo sơ mi \(ID {product.id}\).*ngưng hoạt động"):
+        stock_service.create_stock_document(
+            db_session,
+            StockDocumentType.IN.value,
+            [{"product_id": product.id, "quantity": 1}],
+            date.today(),
+            area.id,
+            "Nhập",
             "Admin",
             "",
         )
@@ -109,3 +175,17 @@ def test_reset_inventory_rejects_negative_quantity(db_session):
     with pytest.raises(BusinessError):
         stock_service.reset_inventory(db_session, {product.id: -1})
 
+
+def test_reset_inventory_reports_missing_product_id(db_session):
+    seed_product_and_area(db_session)
+
+    with pytest.raises(BusinessError, match="Không tìm thấy sản phẩm ID 999"):
+        stock_service.reset_inventory(db_session, {999: 0})
+
+
+def test_reset_inventory_reports_inactive_product_name_and_id(db_session):
+    product, _ = seed_product_and_area(db_session)
+    product_service.delete_product(db_session, product.id)
+
+    with pytest.raises(BusinessError, match=rf"Sản phẩm Áo sơ mi \(ID {product.id}\).*ngưng hoạt động"):
+        stock_service.reset_inventory(db_session, {product.id: 0})

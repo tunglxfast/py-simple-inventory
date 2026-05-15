@@ -2,7 +2,7 @@
 
 ## Vai Trò Tài Liệu
 
-Tài liệu này là source of truth cho quy ước viết code, naming, phân lớp, UI convention, testing, và frontend framework policy. Phạm vi sản phẩm nằm trong `PROJECT_PLAN.md`; kiến trúc kỹ thuật nằm trong `ARCHITECTURE.md`.
+Tài liệu này là source of truth cho quy ước viết code, naming, phân lớp, UI convention, testing, và frontend framework policy. Phạm vi sản phẩm nằm trong `project_rules/PROJECT_PLAN.md`; kiến trúc kỹ thuật nằm trong `project_rules/ARCHITECTURE.md`.
 
 ## Ngôn Ngữ Và Naming
 
@@ -85,6 +85,6 @@ Tài liệu này là source of truth cho quy ước viết code, naming, phân l
 
 ## Documentation
 
-- Khi có quyết định mới làm thay đổi phạm vi sản phẩm, cập nhật `PROJECT_PLAN.md`.
-- Khi có quyết định mới làm thay đổi kiến trúc, data flow, database, repositories, hoặc đóng gói, cập nhật `ARCHITECTURE.md`.
-- Khi có quyết định mới làm thay đổi coding convention, UI convention, test policy, hoặc frontend framework policy, cập nhật `CODING_STANDARDS.md`.
+- Khi có quyết định mới làm thay đổi phạm vi sản phẩm, cập nhật `project_rules/PROJECT_PLAN.md`.
+- Khi có quyết định mới làm thay đổi kiến trúc, data flow, database, repositories, hoặc đóng gói, cập nhật `project_rules/ARCHITECTURE.md`.
+- Khi có quyết định mới làm thay đổi coding convention, UI convention, test policy, hoặc frontend framework policy, cập nhật `project_rules/CODING_STANDARDS.md`.

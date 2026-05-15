@@ -2,7 +2,7 @@
 name = "py-simple-inventory"
 version = "0.1.0"
 description = "Offline inventory management app for Windows."
-readme = "PROJECT_PLAN.md"
+readme = "project_rules/PROJECT_PLAN.md"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.111.0",
@@ -25,4 +25,3 @@ dependencies = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-

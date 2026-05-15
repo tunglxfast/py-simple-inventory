@@ -6,6 +6,7 @@ from app.services.exceptions import BusinessError
 
 
 def ensure_default_admin(db: Session) -> None:
+    # TODO(auth): remove this bootstrap helper after the real user/admin setup flow is finished.
     if user_repository.get_by_username(db, "admin"):
         return
     user_repository.create_user(db, "admin", hash_password("admin"))

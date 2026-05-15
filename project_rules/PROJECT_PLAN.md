@@ -2,7 +2,7 @@
 
 ## Vai Trò Tài Liệu
 
-Tài liệu này là source of truth cho phạm vi sản phẩm, roadmap triển khai, danh sách page dự kiến, và các quyết định chức năng đã chốt. Chi tiết kỹ thuật nằm trong `ARCHITECTURE.md`; quy tắc viết code nằm trong `CODING_STANDARDS.md`.
+Tài liệu này là source of truth cho phạm vi sản phẩm, roadmap triển khai, danh sách page dự kiến, và các quyết định chức năng đã chốt. Chi tiết kỹ thuật nằm trong `project_rules/ARCHITECTURE.md`; quy tắc viết code nằm trong `project_rules/CODING_STANDARDS.md`.
 
 ## Mục Tiêu Sản Phẩm
 
