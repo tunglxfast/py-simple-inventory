@@ -1,0 +1,2 @@
+"""Offline inventory application."""
+

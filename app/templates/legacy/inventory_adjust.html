@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Điều chỉnh tồn kho</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<form method="post" action="/inventory/adjust" class="panel" data-confirm="Bạn có chắc muốn điều chỉnh tồn kho theo số lượng đã nhập?">
+  <p class="text-secondary">Nhập số lượng tồn mong muốn cho từng sản phẩm. Mặc định là tồn hiện tại và không được âm.</p>
+  <table class="table align-middle">
+    <thead><tr><th>Mã hàng</th><th>Tên hàng hóa</th><th>Đơn vị</th><th class="text-end">Tồn hiện tại</th><th style="width: 220px;">Tồn mong muốn</th></tr></thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.code }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.unit }}</td>
+        <td class="text-end">{{ row.stock }}</td>
+        <td><input class="form-control text-end" type="number" min="0" value="{{ row.stock }}" name="quantity_{{ row.product_id }}"></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-center text-secondary">Chưa có sản phẩm</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn btn-primary" type="submit">Xác nhận điều chỉnh tồn kho</button>
+</form>
+{% endblock %}

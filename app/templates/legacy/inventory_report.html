@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="page-title mb-0">Báo cáo xuất - nhập - tồn</h1>
+  <a class="btn btn-primary" href="/reports/inventory.xlsx">Xuất Excel</a>
+</div>
+<div class="panel">
+  <table class="table align-middle">
+    <thead><tr><th>Mã hàng</th><th>Tên hàng hóa</th><th>Đơn vị</th><th class="text-end">Đầu kỳ</th><th class="text-end">Nhập</th><th class="text-end">Xuất</th><th class="text-end">Tồn cuối</th></tr></thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.code }}</td>
+        <td>{{ row.name }}</td>
+        <td>{{ row.unit }}</td>
+        <td class="text-end">{{ row.opening }}</td>
+        <td class="text-end">{{ row.stock_in }}</td>
+        <td class="text-end">{{ row.stock_out }}</td>
+        <td class="text-end fw-bold">{{ row.closing }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" class="text-center text-secondary">Chưa có dữ liệu</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
