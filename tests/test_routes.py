@@ -1,8 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app.core.database import initialize_database
 from app.main import app
-from app.services.auth_service import ensure_default_admin
 
 
 def test_setup_page_renders():
