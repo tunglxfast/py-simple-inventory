@@ -53,7 +53,6 @@ Tài liệu này là source of truth cho quy ước viết code, naming, phân l
 - Dùng Bootstrap và CSS thuần theo mặc định.
 - Không thêm frontend framework khác nếu chưa được chủ dự án đồng ý.
 - Layout desktop-first, nhưng không được vỡ trên màn hình nhỏ.
-- Màu chủ đạo: trắng, xanh lá nhạt, xám nhạt cho border/background phụ.
 - Bảng dữ liệu phải dễ đọc, có header rõ, căn lề hợp lý, và trạng thái rỗng nếu chưa có dữ liệu.
 - Form nhập/xuất kho phải có validation rõ ràng.
 - Form điều chỉnh tồn kho phải hiển thị tất cả sản phẩm với số lượng mặc định bằng tồn hiện tại và chặn số âm trước khi submit.

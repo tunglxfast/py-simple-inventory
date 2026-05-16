@@ -2,7 +2,7 @@
 
 ## Vai Trò Tài Liệu
 
-Tài liệu này là source of truth cho phạm vi sản phẩm, roadmap triển khai, danh sách page dự kiến, và các quyết định chức năng đã chốt. Chi tiết kỹ thuật nằm trong `project_rules/ARCHITECTURE.md`; quy tắc viết code nằm trong `project_rules/CODING_STANDARDS.md`.
+Tài liệu này là source of truth cho phạm vi sản phẩm, roadmap triển khai, danh sách page dự kiến, và các quyết định chức năng đã chốt. Chi tiết kỹ thuật nằm trong `project_rules/ARCHITECTURE.md`; quy tắc viết code nằm trong `project_rules/CODING_STANDARDS.md`; quy định chi tiết cho các trang UI nằm trong `project_rules/UI_PAGES.md`.
 
 ## Mục Tiêu Sản Phẩm
 
@@ -106,6 +106,8 @@ UI dùng tiếng Việt, ưu tiên phong cách desktop app quản lý kho: bản
 - Kiểm tra người dùng mở app, tạo database nếu chưa có, nhập dữ liệu, đóng app, mở lại và dữ liệu vẫn còn.
 
 ## Danh Sách Page Dự Kiến
+
+Quy định chi tiết về layout, thành phần, hành vi, text, màu sắc và trải nghiệm của từng trang UI sẽ được quản lý trong `project_rules/UI_PAGES.md`.
 
 - Login: đăng nhập admin local.
 - Database Setup: thông báo chưa có database và nút tạo database mới.

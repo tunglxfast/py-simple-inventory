@@ -17,7 +17,7 @@
 </div>
 <div class="panel mb-3">
   <h2 class="h5">Thêm sản phẩm</h2>
-  <form class="row g-2" method="post" action="/products">
+  <form class="row g-2" method="post" action="/products" data-confirm="Bạn có chắc muốn thêm sản phẩm này?">
     <div class="col-md-2"><input class="form-control" name="code" placeholder="Mã hàng"></div>
     <div class="col-md-4"><input class="form-control" name="name" placeholder="Tên hàng hóa"></div>
     <div class="col-md-2"><input class="form-control" name="unit" placeholder="Đơn vị tính"></div>
@@ -37,12 +37,8 @@
         <td><input class="form-control" form="update-product-{{ product.id }}" name="note" value="{{ product.note or '' }}"></td>
         <td class="text-center"><input class="form-check-input" form="update-product-{{ product.id }}" type="checkbox" name="is_active" value="true" {% if product.is_active %}checked{% endif %}></td>
         <td class="text-end">
-          <form id="update-product-{{ product.id }}" method="post" action="/products/{{ product.id }}/update" class="d-inline">
-            <button class="btn btn-sm btn-outline-primary" type="submit">Lưu</button>
-          </form>
-          <form method="post" action="/products/{{ product.id }}/delete" class="d-inline">
-            <button class="btn btn-sm btn-outline-danger" type="submit">Xoá</button>
-          </form>
+          <button class="btn btn-sm btn-outline-primary" form="update-product-{{ product.id }}" type="submit">Lưu</button>
+          <button class="btn btn-sm btn-outline-danger" form="delete-product-{{ product.id }}" type="submit">Xoá</button>
         </td>
       </tr>
       {% else %}
@@ -50,5 +46,9 @@
       {% endfor %}
     </tbody>
   </table>
+  {% for product in products %}
+  <form id="update-product-{{ product.id }}" method="post" action="/products/{{ product.id }}/update" data-confirm="Bạn có chắc muốn lưu thay đổi sản phẩm này?"></form>
+  <form id="delete-product-{{ product.id }}" method="post" action="/products/{{ product.id }}/delete" data-confirm="Bạn có chắc muốn xoá sản phẩm này?"></form>
+  {% endfor %}
 </div>
 {% endblock %}

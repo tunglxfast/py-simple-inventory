@@ -3,7 +3,7 @@
 <h1 class="page-title">Khu vực</h1>
 {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
 <div class="panel mb-3">
-  <form class="row g-2" method="post" action="/areas">
+  <form class="row g-2" method="post" action="/areas" data-confirm="Bạn có chắc muốn thêm khu vực này?">
     <div class="col-md-4"><input class="form-control" name="name" placeholder="Tên khu vực"></div>
     <div class="col-md-6"><input class="form-control" name="description" placeholder="Mô tả"></div>
     <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Thêm</button></div>
@@ -19,9 +19,7 @@
         <td><input class="form-control" form="update-area-{{ area.id }}" name="description" value="{{ area.description or '' }}"></td>
         <td><input class="form-check-input" form="update-area-{{ area.id }}" type="checkbox" name="is_active" value="true" {% if area.is_active %}checked{% endif %}></td>
         <td class="text-end">
-          <form id="update-area-{{ area.id }}" method="post" action="/areas/{{ area.id }}/update" class="d-inline">
-            <button class="btn btn-sm btn-outline-primary" type="submit">Lưu</button>
-          </form>
+          <button class="btn btn-sm btn-outline-primary" form="update-area-{{ area.id }}" type="submit">Lưu</button>
         </td>
       </tr>
       {% else %}
@@ -29,5 +27,8 @@
       {% endfor %}
     </tbody>
   </table>
+  {% for area in areas %}
+  <form id="update-area-{{ area.id }}" method="post" action="/areas/{{ area.id }}/update" data-confirm="Bạn có chắc muốn lưu thay đổi khu vực này?"></form>
+  {% endfor %}
 </div>
 {% endblock %}

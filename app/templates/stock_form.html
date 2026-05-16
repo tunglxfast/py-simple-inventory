@@ -2,7 +2,7 @@
 {% block content %}
 <h1 class="page-title">{{ title }}</h1>
 {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
-<form method="post" action="/stock/{{ document_type }}" class="panel">
+<form method="post" action="/stock/{{ document_type }}" class="panel" data-confirm="Bạn có chắc muốn lưu phiếu này?">
   <div class="row g-3 mb-4">
     <div class="col-md-3">
       <label class="form-label">Ngày</label>
@@ -27,22 +27,14 @@
       <input class="form-control" name="note">
     </div>
   </div>
-  <div class="d-flex justify-content-between align-items-center mb-2">
-    <h2 class="h5 mb-0">Dòng hàng</h2>
-    <button class="btn btn-outline-primary btn-sm" type="button" onclick="addStockLine()">Thêm dòng</button>
-  </div>
+  <h2 class="h5 mb-2">Dòng hàng</h2>
   <table class="table align-middle">
     <thead><tr><th>Mã hàng</th><th style="width: 180px;">Số lượng</th><th>Ghi chú</th><th style="width: 80px;"></th></tr></thead>
     <tbody id="stock-lines">
-      <tr>
-        <td>
-          <select class="form-select" name="product_id" required>
-            {% for product in products %}<option value="{{ product.id }}">{{ product.code }} - {{ product.name }}</option>{% endfor %}
-          </select>
+      <tr id="add-stock-line-row">
+        <td colspan="4" class="text-center">
+          <button class="btn btn-outline-primary btn-sm" type="button" onclick="addStockLine()">Thêm sản phẩm</button>
         </td>
-        <td><input class="form-control" name="quantity" type="number" min="1" value="1" required></td>
-        <td><input class="form-control" name="line_note"></td>
-        <td><button class="btn btn-outline-danger btn-sm" type="button" onclick="removeStockLine(this)">Xoá</button></td>
       </tr>
     </tbody>
   </table>
@@ -61,4 +53,3 @@
   </tr>
 </template>
 {% endblock %}
-
