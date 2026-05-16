@@ -20,7 +20,7 @@ Nếu có quyết định mới, cập nhật tài liệu liên quan trước ho
 - Thêm UI Jinja2/Bootstrap cho các page chính.
 - Copy vendor FE assets vào `app/static/vendor/`; app không dùng trực tiếp thư mục `vendors/`.
 - Có luồng Database Setup tạo `data/inventory.db`.
-- Có reset tồn kho bằng `ADJUST-IN` / `ADJUST-OUT`.
+- Có điều chỉnh tồn kho bằng `ADJUST-IN` / `ADJUST-OUT`.
 - Có export Excel cho báo cáo.
 - Có tests nền; kết quả gần nhất: `7 passed`.
 - Có `project_planning/CURRENT_STATUS.md` để checklist kiểm tra thủ công.
@@ -62,7 +62,7 @@ Nếu có quyết định mới, cập nhật tài liệu liên quan trước ho
    - Thêm filter theo khoảng ngày, khu vực, sản phẩm.
    - Đảm bảo Excel xuất đúng bộ lọc.
 
-6. Hoàn thiện Reset tồn kho:
+6. Hoàn thiện điều chỉnh tồn kho:
    - Kiểm tra UI với nhiều sản phẩm.
    - Đảm bảo `ADJUST-IN` / `ADJUST-OUT` hiển thị hợp lý trong lịch sử và báo cáo.
 

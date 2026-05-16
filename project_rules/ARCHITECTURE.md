@@ -138,11 +138,11 @@ Tất cả cột dạng text trong database phải hỗ trợ Unicode tiếng Vi
 - Xuất kho: route nhận form -> service kiểm tra tồn -> repository tạo phiếu và dòng phiếu nếu hợp lệ.
 - Báo cáo: route nhận bộ lọc -> service chuẩn hóa filter -> repository aggregate giao dịch -> route render bảng hoặc export Excel.
 - Xoá sản phẩm: route nhận action -> service kiểm tra nghiệp vụ nếu cần -> repository set `is_active = false`.
-- Reset tồn kho: route nhận số lượng tồn mong muốn cho từng sản phẩm -> service so sánh với tồn hiện tại -> repository tạo dòng điều chỉnh `ADJUST-IN` hoặc `ADJUST-OUT` theo phần chênh lệch.
+- Điều chỉnh tồn kho: route nhận số lượng tồn mong muốn cho từng sản phẩm -> service so sánh với tồn hiện tại -> repository tạo dòng điều chỉnh `ADJUST-IN` hoặc `ADJUST-OUT` theo phần chênh lệch.
 
 ## Adjustment Documents
 
-Phiếu điều chỉnh tồn kho phục vụ chức năng reset/nhập lại tồn kho ban đầu.
+Phiếu điều chỉnh tồn kho phục vụ chức năng điều chỉnh tồn kho ban đầu.
 
 - Nếu số lượng sản phẩm mà người dùng nhập lớn hơn tồn hiện tại, tạo điều chỉnh `ADJUST-IN` với số lượng bằng phần chênh lệch.
 - Nếu số lượng sản phẩm mà người dùng nhập nhỏ hơn tồn hiện tại, tạo điều chỉnh `ADJUST-OUT` với số lượng bằng phần chênh lệch.

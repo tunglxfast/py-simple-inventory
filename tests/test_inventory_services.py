@@ -140,7 +140,7 @@ def test_stock_document_rejects_inactive_product(db_session):
         )
 
 
-def test_reset_inventory_creates_adjust_in_and_out(db_session):
+def test_adjust_inventory_creates_adjust_in_and_out(db_session):
     product_a, area = seed_product_and_area(db_session)
     product_b = product_service.create_product(db_session, "SP002", "Quần jean", "Cái")
     stock_service.create_stock_document(
@@ -157,7 +157,7 @@ def test_reset_inventory_creates_adjust_in_and_out(db_session):
         "",
     )
 
-    adjust_in_count, adjust_out_count = stock_service.reset_inventory(
+    adjust_in_count, adjust_out_count = stock_service.adjust_inventory(
         db_session,
         {product_a.id: 8, product_b.id: 3},
     )
@@ -174,23 +174,23 @@ def test_reset_inventory_creates_adjust_in_and_out(db_session):
     }
 
 
-def test_reset_inventory_rejects_negative_quantity(db_session):
+def test_adjust_inventory_rejects_negative_quantity(db_session):
     product, _ = seed_product_and_area(db_session)
 
     with pytest.raises(BusinessError):
-        stock_service.reset_inventory(db_session, {product.id: -1})
+        stock_service.adjust_inventory(db_session, {product.id: -1})
 
 
-def test_reset_inventory_reports_missing_product_id(db_session):
+def test_adjust_inventory_reports_missing_product_id(db_session):
     seed_product_and_area(db_session)
 
     with pytest.raises(BusinessError, match="Không tìm thấy sản phẩm ID 999"):
-        stock_service.reset_inventory(db_session, {999: 0})
+        stock_service.adjust_inventory(db_session, {999: 0})
 
 
-def test_reset_inventory_reports_inactive_product_name_and_id(db_session):
+def test_adjust_inventory_reports_inactive_product_name_and_id(db_session):
     product, _ = seed_product_and_area(db_session)
     product_service.delete_product(db_session, product.id)
 
     with pytest.raises(BusinessError, match=rf"Sản phẩm Áo sơ mi \(ID {product.id}\).*ngưng hoạt động"):
-        stock_service.reset_inventory(db_session, {product.id: 0})
+        stock_service.adjust_inventory(db_session, {product.id: 0})

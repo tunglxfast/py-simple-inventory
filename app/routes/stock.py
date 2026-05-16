@@ -98,17 +98,17 @@ def document_detail(request: Request, document_id: int, db: Session = Depends(ge
     )
 
 
-@router.get("/inventory/reset")
-def reset_inventory_page(request: Request, db: Session = Depends(get_db)):
+@router.get("/inventory/adjust")
+def adjust_inventory_page(request: Request, db: Session = Depends(get_db)):
     return request.app.state.templates.TemplateResponse(
         request,
-        "inventory_reset.html",
+        "inventory_adjust.html",
         template_context(request, rows=stock_service.get_stock_table(db), error=None),
     )
 
 
-@router.post("/inventory/reset")
-async def reset_inventory(request: Request, db: Session = Depends(get_db)):
+@router.post("/inventory/adjust")
+async def adjust_inventory(request: Request, db: Session = Depends(get_db)):
     form = await request.form()
     desired: dict[int, int] = {}
     for key, value in form.items():
@@ -116,11 +116,11 @@ async def reset_inventory(request: Request, db: Session = Depends(get_db)):
             product_id = int(key.removeprefix("quantity_"))
             desired[product_id] = int(value or 0)
     try:
-        stock_service.reset_inventory(db, desired)
+        stock_service.adjust_inventory(db, desired)
     except BusinessError as exc:
         return request.app.state.templates.TemplateResponse(
             request,
-            "inventory_reset.html",
+            "inventory_adjust.html",
             template_context(request, rows=stock_service.get_stock_table(db), error=str(exc)),
             status_code=400,
         )

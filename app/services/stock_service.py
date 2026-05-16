@@ -56,7 +56,7 @@ def create_stock_document(
     return document
 
 
-def reset_inventory(db: Session, desired_quantities: dict[int, int]) -> tuple[int, int]:
+def adjust_inventory(db: Session, desired_quantities: dict[int, int]) -> tuple[int, int]:
     if not desired_quantities:
         return (0, 0)
     for quantity in desired_quantities.values():

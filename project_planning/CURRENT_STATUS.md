@@ -74,7 +74,7 @@ Templates đang dùng asset qua `/static/vendor/...`.
 - `/documents/{id}`: chi tiết phiếu kho.
 - `/reports/inventory`: báo cáo xuất - nhập - tồn.
 - `/reports/inventory.xlsx`: xuất Excel báo cáo.
-- `/inventory/reset`: reset/nhập lại tồn kho mong muốn.
+- `/inventory/adjust`: điều chỉnh tồn kho mong muốn.
 
 ## Chức Năng Đã Có
 
@@ -130,9 +130,9 @@ Templates đang dùng asset qua `/static/vendor/...`.
   - `IN` và `ADJUST-IN` như nhập.
   - `OUT` và `ADJUST-OUT` như xuất.
 
-### Reset tồn kho
+### Điều chỉnh tồn kho
 
-- Page `/inventory/reset` hiển thị tất cả sản phẩm active.
+- Page `/inventory/adjust` hiển thị tất cả sản phẩm active.
 - Ô số lượng mong muốn mặc định là `0`.
 - Không cho nhập số âm.
 - Khi xác nhận:
@@ -160,9 +160,9 @@ Templates đang dùng asset qua `/static/vendor/...`.
 - Nhập kho làm tăng tồn.
 - Xuất kho làm giảm tồn.
 - Chặn xuất âm.
-- Reset tồn kho tạo `ADJUST-IN`.
-- Reset tồn kho tạo `ADJUST-OUT`.
-- Reset tồn kho từ chối số âm.
+- Điều chỉnh tồn kho tạo `ADJUST-IN`.
+- Điều chỉnh tồn kho tạo `ADJUST-OUT`.
+- Điều chỉnh tồn kho từ chối số âm.
 - Smoke test route setup/dashboard.
 
 Lệnh kiểm tra:
