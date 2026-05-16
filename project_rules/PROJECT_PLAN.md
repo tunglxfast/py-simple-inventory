@@ -107,19 +107,7 @@ UI dùng tiếng Việt, ưu tiên phong cách desktop app quản lý kho: bản
 
 ## Danh Sách Page Dự Kiến
 
-Quy định chi tiết về layout, thành phần, hành vi, text, màu sắc và trải nghiệm của từng trang UI sẽ được quản lý trong `project_rules/UI_PAGES.md`.
-
-- Login: đăng nhập admin local.
-- Database Setup: thông báo chưa có database và nút tạo database mới.
-- Dashboard: tổng quan nhanh tồn kho, số sản phẩm, số phiếu gần đây.
-- Sản phẩm: danh sách, tìm kiếm, thêm/sửa/xoá, checkbox xem inactive.
-- Khu vực: danh sách, thêm/sửa, ẩn/hiện.
-- Nhập kho: tạo phiếu nhập nhiều dòng.
-- Xuất kho: tạo phiếu xuất nhiều dòng và kiểm tra tồn.
-- Lịch sử phiếu kho: xem, tìm kiếm, lọc phiếu nhập/xuất.
-- Chi tiết phiếu kho: xem thông tin phiếu và các dòng hàng.
-- Báo cáo xuất - nhập - tồn: xem báo cáo và xuất Excel.
-- Điều chỉnh tồn kho: nhập số lượng tồn mong muốn cho tất cả sản phẩm.
+Danh sách page dự kiến và quy định chi tiết về layout, thành phần, hành vi, text, màu sắc, hình ảnh tham chiếu và trải nghiệm của từng trang UI được quản lý trong `project_rules/UI_PAGES.md`.
 
 ## Quyết Định Chức Năng Đã Chốt
 
