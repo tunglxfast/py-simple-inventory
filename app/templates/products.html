@@ -4,8 +4,8 @@
 {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
 
 <div class="panel mb-3">
-  <form method="get" action="/products">
-    <div class="row justify-content-center g-2">
+  <form method="get" action="/products" autocomplete="off">
+    <div class="row g-2">
       <div class="col-md-6">
         <input class="form-control" name="search" value="{{ search }}" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm">
       </div>
@@ -16,9 +16,9 @@
         <a class="btn btn-primary" href="/products">Reset</a>
       </div>
     </div>
-    <div class="row justify-content-center mt-2">
+    <div class="row mt-2">
       <div class="col-md-6 form-check">
-        <input class="form-check-input" type="checkbox" name="include_inactive" value="true" id="includeInactive" {% if include_inactive %}checked{% endif %}>
+        <input class="form-check-input" type="checkbox" name="include_inactive" value="true" id="includeInactive" autocomplete="off" {% if include_inactive %}checked{% endif %}>
         <label class="form-check-label" for="includeInactive">Bao gồm sản phẩm inactive</label>
       </div>
     </div>
@@ -26,37 +26,136 @@
 </div>
 
 <div class="d-flex gap-2 mb-3">
-  <button class="btn btn-success" type="button">Thêm sản phẩm</button>
-  <button class="btn btn-primary" type="button">Điều chỉnh sản phẩm</button>
-  <button class="btn btn-danger" type="submit" form="delete-selected-product">Xoá sản phẩm</button>
+  <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#create-product-modal">Thêm sản phẩm</button>
+  <button class="btn btn-primary" id="edit-selected-product" type="button" {% if not products %}disabled{% endif %}>Điều chỉnh sản phẩm</button>
+  <button class="btn btn-danger" id="delete-selected-product-button" type="submit" form="delete-selected-product" {% if not products %}disabled{% endif %}>Xoá sản phẩm</button>
+</div>
+
+<div class="modal fade" id="create-product-modal" tabindex="-1" aria-labelledby="create-product-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form method="post" action="/products" data-confirm="Bạn có chắc muốn thêm sản phẩm này?">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="create-product-modal-title">Thêm sản phẩm</h2>
+          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label" for="create-product-code">Mã sản phẩm</label>
+              <input class="form-control" id="create-product-code" name="code">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="create-product-name">Tên sản phẩm</label>
+              <input class="form-control" id="create-product-name" name="name">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="create-product-unit">Đơn vị tính</label>
+              <input class="form-control" id="create-product-unit" name="unit">
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="create-product-note">Ghi chú</label>
+              <input class="form-control" id="create-product-note" name="note">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="submit">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <div class="panel">
   <table class="table align-middle">
     <thead>
       <tr>
-        <th>Mã sản phẩm</th>
-        <th>Tên sản phẩm</th>
-        <th class="text-end">Số lượng</th>
-        <th>Đơn vị tính</th>
+        <th class="border">Mã sản phẩm</th>
+        <th class="border">Tên sản phẩm</th>
+        <th class="border">Số lượng</th>
+        <th class="border">Đơn vị tính</th>
+        <th class="border">Trạng thái</th>
       </tr>
     </thead>
     <tbody>
       {% for product in products %}
-      <tr class="{% if loop.first %}table-primary{% endif %}">
+      <tr
+        class="product-row {% if loop.first %}table-primary{% endif %}"
+        data-product-id="{{ product.id }}"
+        data-code="{{ product.code }}"
+        data-name="{{ product.name }}"
+        data-unit="{{ product.unit }}"
+        data-note="{{ product.note or '' }}"
+        data-is-active="{% if product.is_active %}true{% else %}false{% endif %}"
+        data-update-url="/products/{{ product.id }}/update"
+        data-delete-url="/products/{{ product.id }}/delete"
+        data-confirm="Bạn chắc có muốn xoá sản phẩm [{{ product.code }}] - [{{ product.name }}] này không?"
+        tabindex="0"
+      >
         <td>{{ product.code }}</td>
         <td>{{ product.name }}</td>
-        <td class="text-end">{{ product.stock|default("") }}</td>
+        <td>{{ product.stock|default("") }}</td>
         <td>{{ product.unit }}</td>
+        <td>{% if product.is_active %}Active{% else %}Inactive{% endif %}</td>
       </tr>
       {% else %}
-      <tr><td colspan="4" class="text-center text-secondary">Chưa có sản phẩm</td></tr>
+      <tr><td colspan="5" class="text-center text-secondary">Chưa có sản phẩm</td></tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
 {% if products %}
-<form id="delete-selected-product" method="post" action="/products/{{ products[0].id }}/delete" data-confirm="Bạn có chắc muốn xoá sản phẩm này không?"></form>
+<div class="modal fade" id="edit-product-modal" tabindex="-1" aria-labelledby="edit-product-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="edit-product-form" method="post" action="/products/{{ products[0].id }}/update" data-confirm="Bạn có chắc muốn lưu thay đổi sản phẩm này?">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="edit-product-modal-title">Điều chỉnh sản phẩm</h2>
+          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label" for="edit-product-code">Mã sản phẩm</label>
+              <input class="form-control" id="edit-product-code" name="code" value="{{ products[0].code }}">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="edit-product-name">Tên sản phẩm</label>
+              <input class="form-control" id="edit-product-name" name="name" value="{{ products[0].name }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="edit-product-unit">Đơn vị tính</label>
+              <input class="form-control" id="edit-product-unit" name="unit" value="{{ products[0].unit }}">
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="edit-product-note">Ghi chú</label>
+              <input class="form-control" id="edit-product-note" name="note" value="{{ products[0].note or '' }}">
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" id="edit-product-active" type="checkbox" name="is_active" value="true" {% if products[0].is_active %}checked{% endif %}>
+                <label class="form-check-label" for="edit-product-active">Active</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="submit">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<form
+  id="delete-selected-product"
+  method="post"
+  action="/products/{{ products[0].id }}/delete"
+  data-confirm="Bạn chắc có muốn xoá sản phẩm [{{ products[0].code }}] - [{{ products[0].name }}] này không?"
+></form>
 {% endif %}
 {% endblock %}

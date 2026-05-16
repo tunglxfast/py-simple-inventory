@@ -75,6 +75,15 @@ body {
   color: #294135;
 }
 
+.product-row {
+  cursor: pointer;
+}
+
+.product-row:focus {
+  outline: 2px solid var(--app-green-dark);
+  outline-offset: -2px;
+}
+
 @media (max-width: 900px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -84,4 +93,3 @@ body {
     border-bottom: 1px solid var(--app-border);
   }
 }
-

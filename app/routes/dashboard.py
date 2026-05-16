@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -9,6 +10,11 @@ router = APIRouter()
 
 
 @router.get("/")
+def products_home():
+    return RedirectResponse("/products", status_code=303)
+
+# TODO: legacy; will delete when finish upgrade UI
+@router.get("/dashboard")
 def dashboard(request: Request, db: Session = Depends(get_db)):
     products = product_service.list_products(db)
     stock_rows = stock_service.get_stock_table(db)

@@ -18,7 +18,7 @@ def render_products_page(
     error: str | None = None,
     status_code: int = 200,
 ):
-    products = product_service.list_products(db, include_inactive=include_inactive, search=search)
+    products = product_service.list_products_with_stock(db, include_inactive=include_inactive, search=search)
     return request.app.state.templates.TemplateResponse(
         request,
         "products.html",
@@ -74,7 +74,7 @@ def update_product(
         product_service.update_product(db, product_id, code, name, unit, note, is_active=is_active)
     except BusinessError as exc:
         return render_products_page(request, db, include_inactive=True, error=str(exc), status_code=400)
-    return RedirectResponse("/products?include_inactive=true", status_code=303)
+    return RedirectResponse("/products", status_code=303)
 
 
 @router.post("/{product_id}/delete")

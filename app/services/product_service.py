@@ -8,6 +8,10 @@ def list_products(db: Session, include_inactive: bool = False, search: str | Non
     return product_repository.list_products(db, include_inactive=include_inactive, search=search)
 
 
+def list_products_with_stock(db: Session, include_inactive: bool = False, search: str | None = None):
+    return product_repository.list_products_with_stock(db, include_inactive=include_inactive, search=search)
+
+
 def create_product(db: Session, code: str, name: str, unit: str, note: str | None = None):
     validate_product_input(code, name, unit)
     existing = product_repository.get_by_code(db, code.strip())
