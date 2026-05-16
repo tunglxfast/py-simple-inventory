@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Sản phẩm</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="panel mb-3">
+  <form class="row g-2 align-items-end" method="get" action="/products">
+    <div class="col-md-5">
+      <label class="form-label">Tìm kiếm</label>
+      <input class="form-control" name="search" value="{{ search }}" placeholder="Mã hàng hoặc tên hàng">
+    </div>
+    <div class="col-md-3 form-check mb-2">
+      <input class="form-check-input" type="checkbox" name="include_inactive" value="true" id="includeInactive" {% if include_inactive %}checked{% endif %}>
+      <label class="form-check-label" for="includeInactive">Xem inactive</label>
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Lọc</button></div>
+  </form>
+</div>
+<div class="panel mb-3">
+  <h2 class="h5">Thêm sản phẩm</h2>
+  <form class="row g-2" method="post" action="/products" data-confirm="Bạn có chắc muốn thêm sản phẩm này?">
+    <div class="col-md-2"><input class="form-control" name="code" placeholder="Mã hàng"></div>
+    <div class="col-md-4"><input class="form-control" name="name" placeholder="Tên hàng hóa"></div>
+    <div class="col-md-2"><input class="form-control" name="unit" placeholder="Đơn vị tính"></div>
+    <div class="col-md-3"><input class="form-control" name="note" placeholder="Ghi chú"></div>
+    <div class="col-md-1"><button class="btn btn-primary w-100" type="submit">Thêm</button></div>
+  </form>
+</div>
+<div class="panel">
+  <table class="table align-middle">
+    <thead><tr><th>Mã hàng</th><th>Tên hàng hóa</th><th>Đơn vị</th><th>Ghi chú</th><th>Active</th><th></th></tr></thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td><input class="form-control" form="update-product-{{ product.id }}" name="code" value="{{ product.code }}"></td>
+        <td><input class="form-control" form="update-product-{{ product.id }}" name="name" value="{{ product.name }}"></td>
+        <td><input class="form-control" form="update-product-{{ product.id }}" name="unit" value="{{ product.unit }}"></td>
+        <td><input class="form-control" form="update-product-{{ product.id }}" name="note" value="{{ product.note or '' }}"></td>
+        <td class="text-center"><input class="form-check-input" form="update-product-{{ product.id }}" type="checkbox" name="is_active" value="true" {% if product.is_active %}checked{% endif %}></td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary" form="update-product-{{ product.id }}" type="submit">Lưu</button>
+          <button class="btn btn-sm btn-outline-danger" form="delete-product-{{ product.id }}" type="submit">Xoá</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-secondary">Chưa có sản phẩm</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% for product in products %}
+  <form id="update-product-{{ product.id }}" method="post" action="/products/{{ product.id }}/update" data-confirm="Bạn có chắc muốn lưu thay đổi sản phẩm này?"></form>
+  <form id="delete-product-{{ product.id }}" method="post" action="/products/{{ product.id }}/delete" data-confirm="Bạn có chắc muốn xoá sản phẩm này?"></form>
+  {% endfor %}
+</div>
+{% endblock %}

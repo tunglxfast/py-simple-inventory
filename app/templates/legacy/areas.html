@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Khu vực</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="panel mb-3">
+  <form class="row g-2" method="post" action="/areas" data-confirm="Bạn có chắc muốn thêm khu vực này?">
+    <div class="col-md-4"><input class="form-control" name="name" placeholder="Tên khu vực"></div>
+    <div class="col-md-6"><input class="form-control" name="description" placeholder="Mô tả"></div>
+    <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Thêm</button></div>
+  </form>
+</div>
+<div class="panel">
+  <table class="table align-middle">
+    <thead><tr><th>Tên khu vực</th><th>Mô tả</th><th>Active</th><th></th></tr></thead>
+    <tbody>
+      {% for area in areas %}
+      <tr>
+        <td><input class="form-control" form="update-area-{{ area.id }}" name="name" value="{{ area.name }}"></td>
+        <td><input class="form-control" form="update-area-{{ area.id }}" name="description" value="{{ area.description or '' }}"></td>
+        <td><input class="form-check-input" form="update-area-{{ area.id }}" type="checkbox" name="is_active" value="true" {% if area.is_active %}checked{% endif %}></td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary" form="update-area-{{ area.id }}" type="submit">Lưu</button>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-secondary">Chưa có khu vực</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% for area in areas %}
+  <form id="update-area-{{ area.id }}" method="post" action="/areas/{{ area.id }}/update" data-confirm="Bạn có chắc muốn lưu thay đổi khu vực này?"></form>
+  {% endfor %}
+</div>
+{% endblock %}

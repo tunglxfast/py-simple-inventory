@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tạo database</title>
+  <link rel="stylesheet" href="/static/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
+  <section class="panel" style="max-width: 520px;">
+    <h1 class="h4 mb-3">Chưa có database</h1>
+    <p class="text-secondary">Ứng dụng chưa tìm thấy database trong thư mục dữ liệu. Bấm nút bên dưới để tạo database mới và tài khoản admin mặc định.</p>
+    <form method="post" action="/setup/create">
+      <button class="btn btn-primary" type="submit">Tạo database mới</button>
+    </form>
+  </section>
+</body>
+</html>

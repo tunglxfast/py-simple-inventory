@@ -2,11 +2,11 @@
 
 ## Trạng Thái
 
-Giữ nguyên. Không thay đổi trong đợt thay template mới.
+Đã tạo kế hoạch chi tiết cho màn hình khởi tạo database.
 
 ## Mục Tiêu
 
-Giữ trang setup database hiện tại vì đây là màn hình bootstrap đơn giản, chỉ xuất hiện khi chưa có database.
+Trang Database Setup dùng để bootstrap ứng dụng khi chưa có file database. Màn hình cần giải thích ngắn gọn tình trạng thiếu database, cung cấp một hành động rõ ràng để tạo database và đưa người dùng về luồng đăng nhập sau khi hoàn tất.
 
 ## Route Và Template
 
@@ -30,12 +30,13 @@ Giữ trang setup database hiện tại vì đây là màn hình bootstrap đơn
 - Sau khi setup xong, redirect về `/login`.
 - Nếu database đã tồn tại, GET `/setup` redirect về `/`.
 
-## Không Thay Đổi
+## Quy Tắc Triển Khai
 
-- Không đổi layout.
-- Không đổi route/action.
-- Không đổi nội dung chính.
-- Không áp dụng template mới cho trang này trong đợt hiện tại.
+- Form tạo database dùng `method="post"` và submit về `/setup/create`.
+- GET `/setup` chỉ hiển thị màn hình setup khi database chưa sẵn sàng.
+- Khi database đã sẵn sàng, GET `/setup` đưa người dùng về trang chính.
+- Quá trình tạo database chạy qua luồng khởi tạo database của ứng dụng.
+- Sau khi tạo database và tài khoản admin mặc định, người dùng được đưa về `/login`.
 
 ## Kiểm Tra Thủ Công
 

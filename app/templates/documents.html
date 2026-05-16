@@ -2,24 +2,6 @@
 {% block content %}
 <h1 class="page-title">Lịch sử phiếu kho</h1>
 <div class="panel">
-  <table class="table align-middle">
-    <thead><tr><th>ID</th><th>Loại</th><th>Ngày</th><th>Khu vực</th><th>Diễn giải</th><th>Tạo lúc</th><th></th></tr></thead>
-    <tbody>
-      {% for document in documents %}
-      <tr>
-        <td>{{ document.id }}</td>
-        <td>{{ document.type }}</td>
-        <td>{{ document.date or "" }}</td>
-        <td>{{ document.area.name if document.area else "" }}</td>
-        <td>{{ document.description or "" }}</td>
-        <td>{{ document.created_at }}</td>
-        <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="/documents/{{ document.id }}">Xem</a></td>
-      </tr>
-      {% else %}
-      <tr><td colspan="7" class="text-center text-secondary">Chưa có phiếu kho</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <p class="text-secondary mb-0">Placeholder cho UI mới của trang Lịch sử phiếu kho. Template legacy đã được lưu trong `app/templates/legacy/documents.html`.</p>
 </div>
 {% endblock %}
-

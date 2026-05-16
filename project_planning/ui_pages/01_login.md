@@ -2,11 +2,11 @@
 
 ## Trạng Thái
 
-Giữ nguyên. Không thay đổi trong đợt thay template mới.
+Đã tạo kế hoạch chi tiết cho màn hình đăng nhập.
 
 ## Mục Tiêu
 
-Giữ trang đăng nhập hiện tại vì chức năng và giao diện đã đủ cho giai đoạn này.
+Trang Login dùng để xác thực người dùng local trước khi vào ứng dụng quản lý kho. Màn hình cần tối giản, tập trung vào form đăng nhập, hiển thị lỗi rõ ràng và hỗ trợ thao tác nhanh bằng phím Enter.
 
 ## Route Và Template
 
@@ -31,12 +31,14 @@ Giữ trang đăng nhập hiện tại vì chức năng và giao diện đã đ�
 - Nếu hợp lệ, route tạo cookie `auth_token` và redirect về `/`.
 - Nếu không hợp lệ, render lại trang với lỗi tiếng Việt.
 
-## Không Thay Đổi
+## Quy Tắc Triển Khai
 
-- Không đổi layout.
-- Không đổi field name.
-- Không đổi route/action.
-- Không áp dụng template mới cho trang này trong đợt hiện tại.
+- Form dùng `method="post"` và submit về `/login`.
+- Field tài khoản dùng name tương ứng với route xử lý đăng nhập.
+- Field mật khẩu dùng input type `password`.
+- Alert lỗi chỉ hiển thị khi route truyền biến lỗi về template.
+- Sau khi đăng nhập thành công, người dùng được đưa tới trang chính của ứng dụng.
+- Cookie xác thực do route đăng nhập chịu trách nhiệm tạo.
 
 ## Kiểm Tra Thủ Công
 

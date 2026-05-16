@@ -13,10 +13,10 @@ Trang Sản phẩm là màn hình quản lý danh sách sản phẩm, cho phép 
 - Trang danh sách: `GET /products`
 - Tìm kiếm: `GET /products?search=...&include_inactive=...`
 - Thêm sản phẩm:
-  - Có thể dùng route hiện tại `POST /products`.
+  - Submit form thêm sản phẩm về `POST /products`.
   - Cần thêm UI form riêng cho trạng thái thêm sản phẩm.
 - Điều chỉnh sản phẩm:
-  - Có thể dùng route hiện tại `POST /products/{product_id}/update`.
+  - Submit form điều chỉnh sản phẩm về `POST /products/{product_id}/update`.
   - Cần thêm UI form riêng cho trạng thái điều chỉnh sản phẩm.
 - Xoá sản phẩm: `POST /products/{product_id}/delete`
 
@@ -71,7 +71,7 @@ Danh sách phải có một sản phẩm đang được đánh dấu/selected.
 
 - Mặc định đánh dấu sản phẩm đầu tiên trong danh sách.
 - Người dùng có thể chọn một dòng sản phẩm khác.
-- Thay đổi vị trí con trỏ sang các field khác (ví dụ: Tìm kiếm) trong trang này không thay đổi vị đánh dấu sản phẩm hiện tại.
+- Khi người dùng focus sang ô tìm kiếm hoặc field khác, dòng sản phẩm đang chọn vẫn được ghi nhớ.
 - Dòng đang chọn phải có trạng thái visual rõ ràng.
 - Nếu danh sách rỗng, các nút `Điều chỉnh sản phẩm` và `Xoá sản phẩm` nên ở trạng thái disabled.
 
@@ -97,7 +97,7 @@ Danh sách phải có một sản phẩm đang được đánh dấu/selected.
   - Nội dung: `Bạn có chắc muốn xoá sản phẩm này không?`
   - Có lựa chọn `OK` và `Cancel`.
 - Chọn `OK` thì gửi request xoá sản phẩm.
-- Chọn `Cancel` thì đóng dialog và không thay đổi dữ liệu.
+- Chọn `Cancel` thì đóng dialog và không gửi request xoá.
 - Xoá sản phẩm vẫn là chuyển sang inactive, không hard delete.
 
 ## Dữ Liệu Cần Hiển Thị
@@ -109,7 +109,7 @@ Mỗi dòng sản phẩm cần tối thiểu:
 - `stock` hoặc tồn tính từ giao dịch -> `Số lượng`
 - `unit` -> `Đơn vị tính`
 
-Ghi chú: route hiện tại `product_service.list_products()` chưa trả tồn kho. Khi triển khai template mới, cần lấy thêm tồn kho từ service phù hợp hoặc tạo view model cho trang sản phẩm.
+Ghi chú: danh sách sản phẩm cần có dữ liệu tồn kho để hiển thị cột `Số lượng`. Khi triển khai template mới, cần lấy thêm tồn kho từ service phù hợp hoặc tạo view model cho trang sản phẩm.
 
 ## Kiểm Tra Thủ Công
 
