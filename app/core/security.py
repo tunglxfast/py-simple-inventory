@@ -32,16 +32,19 @@ def verify_auth_token(token: str | None) -> str | None:
         return None
     try:
         decoded = base64.urlsafe_b64decode(token.encode("utf-8")).decode("utf-8")
-        username, issued_at, signature = decoded.rsplit(":", 2)
-    except Exception:
+        username, issued_at_text, signature = decoded.rsplit(":", 2)
+        issued_at = int(issued_at_text)
+    except (TypeError, ValueError, UnicodeDecodeError):
         return None
-    payload = f"{username}:{issued_at}"
+    settings = get_settings()
+    if int(time.time()) - issued_at > settings.auth_token_ttl_seconds:
+        return None
+    payload = f"{username}:{issued_at_text}"
     expected = hmac.new(
-        get_settings().secret_key.encode("utf-8"),
+        settings.secret_key.encode("utf-8"),
         payload.encode("utf-8"),
         hashlib.sha256,
     ).hexdigest()
     if not hmac.compare_digest(signature, expected):
         return None
     return username
-

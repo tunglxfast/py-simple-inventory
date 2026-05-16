@@ -1,10 +1,11 @@
 from collections.abc import Generator
 
+from alembic import command
+from alembic.config import Config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import get_settings
-from app.models.base import Base
 
 
 def build_engine(database_url: str | None = None):
@@ -23,8 +24,10 @@ def database_exists() -> bool:
 
 def initialize_database() -> None:
     settings = get_settings()
-    settings.data_dir.mkdir(parents=True, exist_ok=True)
-    Base.metadata.create_all(bind=engine)
+    settings.database_path.parent.mkdir(parents=True, exist_ok=True)
+    alembic_config = Config(str(settings.project_root / "alembic.ini"))
+    alembic_config.set_main_option("script_location", str(settings.project_root / "alembic"))
+    command.upgrade(alembic_config, "head")
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -33,4 +36,3 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
-
