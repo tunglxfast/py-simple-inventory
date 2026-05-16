@@ -42,11 +42,21 @@ def create_area(
 
 @router.post("/{area_id}/update")
 def update_area(
+    request: Request,
     area_id: int,
     name: str = Form(""),
     description: str = Form(""),
     is_active: bool = Form(False),
     db: Session = Depends(get_db),
 ):
-    area_service.update_area(db, area_id, name, description, is_active)
+    try:
+        area_service.update_area(db, area_id, name, description, is_active)
+    except BusinessError as exc:
+        areas = area_service.list_areas(db, include_inactive=True)
+        return request.app.state.templates.TemplateResponse(
+            request,
+            "areas.html",
+            template_context(request, areas=areas, include_inactive=True, error=str(exc)),
+            status_code=400,
+        )
     return RedirectResponse("/areas?include_inactive=true", status_code=303)

@@ -49,7 +49,6 @@ def create_stock_document(
     lines = [
         StockLineData(product_id=pid, quantity=qty, note=line_note[index] if index < len(line_note) else "")
         for index, (pid, qty) in enumerate(zip(product_id, quantity, strict=False))
-        if pid and qty
     ]
     try:
         stock_service.create_stock_document(
